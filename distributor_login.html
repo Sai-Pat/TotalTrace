@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriChain - Distributor Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    :root {
+      --primary-green: #0a5c36;
+      --secondary-green: #1a936f;
+      --accent-green: #88d498;
+      --mandi-orange: #FF9800;
+      --mandi-yellow: #FFC107;
+      --mandi-red: #F44336;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a2e1d 0%, #0a5c36 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80') no-repeat center center;
+      background-size: cover;
+      opacity: 0.7;
+    }
+
+    .background-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(10, 46, 29, 0.85) 0%, rgba(255, 152, 0, 0.4) 100%);
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 450px;
+      z-index: 10;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--mandi-orange), var(--mandi-yellow));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo i {
+      font-size: 36px;
+      color: white;
+    }
+
+    .logo-section h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #ffffff, var(--mandi-yellow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-section p {
+      font-size: 16px;
+      color: #c8e6c9;
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--mandi-orange), var(--mandi-yellow), var(--mandi-orange));
+    }
+
+    .welcome-text {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .welcome-text h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .welcome-text p {
+      color: #e8f5e9;
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #e8f5e9;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--mandi-yellow);
+      box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .login-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-login {
+      background: linear-gradient(to right, var(--mandi-yellow));
+      color: white;
+      box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
+    }
+
+    .btn-register {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-register:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .biometric-options {
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    .biometric-title {
+      font-size: 16px;
+      color: #e8f5e9;
+      margin-bottom: 15px;
+    }
+
+    .biometric-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .biometric-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .biometric-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .biometric-btn i {
+      font-size: 24px;
+      color: var(--mandi-yellow);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #c8e6c9;
+      font-size: 14px;
+    }
+
+    /* Vegetable Animation */
+    .vegetables-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .vegetable {
+      position: absolute;
+      top: -50px;
+      font-size: 20px;
+      color: rgba(255, 193, 7, 0.7);
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255, 152, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .modal-icon i {
+      font-size: 36px;
+      color: var(--mandi-yellow);
+    }
+
+    .modal h3 {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    .modal p {
+      color: #e8f5e9;
+      margin-bottom: 25px;
+    }
+
+    .scan-animation {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 20px;
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--mandi-yellow), transparent);
+      animation: scan 2s linear infinite;
+    }
+
+    @keyframes scan {
+      0% {
+        top: 0;
+      }
+      100% {
+        top: 100%;
+      }
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(to right, var(--mandi-orange), var(--mandi-yellow));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .close-modal {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 10px 20px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .close-modal:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Market-themed floating elements */
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .floating-element {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 193, 7, 0.1);
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+      }
+      100% {
+        transform: translateY(0) rotate(360deg);
+      }
+    }
+
+    /* Market Stall Animation */
+    .market-stall {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      animation: bounce 3s ease-in-out infinite;
+      opacity: 0.1;
+    }
+
+    .stall-top {
+      position: absolute;
+      width: 80px;
+      height: 20px;
+      background: rgba(255, 152, 0, 0.3);
+      top: 0;
+      left: 10px;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .stall-leg {
+      position: absolute;
+      width: 5px;
+      height: 60px;
+      background: rgba(255, 152, 0, 0.3);
+    }
+
+    .stall-leg:nth-child(2) {
+      left: 10px;
+      top: 20px;
+    }
+
+    .stall-leg:nth-child(3) {
+      right: 10px;
+      top: 20px;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 576px) {
+      .login-card {
+        padding: 20px;
+      }
+      
+      .login-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .btn {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background with Image -->
+  <div class="background-container">
+    <div class="background-image"></div>
+    <div class="background-overlay"></div>
+  </div>
+
+  <!-- Falling Vegetables -->
+  <div class="vegetables-container" id="vegetablesContainer"></div>
+
+  <!-- Floating Elements -->
+  <div class="floating-elements" id="floatingElements"></div>
+
+  <!-- Market Stall Animation -->
+  <div class="market-stall" style="top: 10%; left: 10%;">
+    <div class="stall-top"></div>
+    <div class="stall-leg"></div>
+    <div class="stall-leg"></div>
+  </div>
+
+  <div class="market-stall" style="top: 15%; right: 15%;">
+    <div class="stall-top"></div>
+    <div class="stall-leg"></div>
+    <div class="stall-leg"></div>
+  </div>
+
+  <!-- Login Container -->
+  <div class="login-container">
+    <div class="logo-section">
+      <div class="logo">
+        <i class="fas fa-truck-loading"></i>
+      </div>
+      <h1>AgriChain</h1>
+      <p>Vegetable Mandi Portal</p>
+    </div>
+
+    <div class="login-card">
+      <div class="welcome-text">
+        <h2>Welcome Back</h2>
+        <p>Access your distribution dashboard</p>
+      </div>
+
+      <form id="distributor-login-form">
+        <div class="form-group">
+          <label for="distributorId">
+            <i class="fas fa-user-tag"></i> Distributor ID
+          </label>
+          <input 
+            type="text" 
+            id="distributorId" 
+            class="form-control" 
+            placeholder="Enter your distributor ID" 
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="securityCode">
+            <i class="fas fa-lock"></i> Security Code
+          </label>
+          <input 
+            type="password" 
+            id="securityCode" 
+            class="form-control" 
+            placeholder="Enter your security code" 
+            required
+          >
+        </div>
+
+        <div class="login-actions">
+          <button type="submit" class="btn btn-login">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+          <button type="button" class="btn btn-register" id="registerBtn">
+            <i class="fas fa-user-plus"></i> Register
+          </button>
+        </div>
+      </form>
+
+      <div class="biometric-options">
+        <p class="biometric-title">Or use biometric login</p>
+        <div class="biometric-buttons">
+          <div class="biometric-btn" id="faceLogin">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="biometric-btn" id="fingerprintLogin">
+            <i class="fas fa-fingerprint"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>New to AgriChain? <a href="distributor_registration.html" style="color: var(--mandi-yellow);">Register as a distributor</a></p>
+      <p style="margin-top: 10px;">AgriChain &copy; 2023 | Redefining Trust in the Foodchain</p>
+    </div>
+  </div>
+
+  <!-- Face Recognition Modal -->
+  <div class="modal" id="faceModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-user-circle"></i>
+      </div>
+      <h3>Face Recognition</h3>
+      <p>Please look directly at the camera</p>
+      
+      <div class="scan-animation">
+        <div class="scan-line"></div>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress" id="faceProgress"></div>
+      </div>
+      
+      <button class="close-modal" id="closeFaceModal">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Fingerprint Modal -->
+  <div class="modal" id="fingerprintModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-fingerprint"></i>
+      </div>
+      <h3>Fingerprint Scan</h3>
+      <p>Place your finger on the sensor</p>
+      
+      <div class="scan-animation">
+        <div class="scan-line"></div>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress" id="fingerprintProgress"></div>
+      </div>
+      
+      <button class="close-modal" id="closeFingerprintModal">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Authentication Successful!</h3>
+      <p>Welcome to the Vegetable Mandi Portal</p>
+      <p style="font-size: 14px; margin-top: 10px;">You will be redirected to your dashboard shortly</p>
+      
+      <div class="progress-bar">
+        <div class="progress" id="successProgress"></div>
+      </div>
+      
+      <button class="close-modal" id="closeSuccessModal" style="display: none;">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Create falling vegetables
+    function createVegetables() {
+      const vegetablesContainer = document.getElementById('vegetablesContainer');
+      const vegetableIcons = ['🍅', '🥕', '🥦', '🌽', '🥬', '🍆', '🥒', '🫑'];
+      
+      function createVegetable() {
+        const vegetable = document.createElement('div');
+        vegetable.classList.add('vegetable');
+        vegetable.innerHTML = vegetableIcons[Math.floor(Math.random() * vegetableIcons.length)];
+        
+        // Random position and animation duration
+        const leftPos = Math.random() * 100;
+        const duration = 10 + Math.random() * 20; // Between 10-30 seconds
+        
+        vegetable.style.left = `${leftPos}%`;
+        vegetable.style.animationDuration = `${duration}s`;
+        
+        // Random delay
+        vegetable.style.animationDelay = `${Math.random() * 5}s`;
+        
+        vegetablesContainer.appendChild(vegetable);
+        
+        // Remove vegetable after animation completes
+        setTimeout(() => {
+          vegetable.remove();
+        }, duration * 1000);
+      }
+      
+      // Create vegetables periodically
+      setInterval(createVegetable, 800);
+    }
+
+    // Create floating elements
+    function createFloatingElements() {
+      const floatingContainer = document.getElementById('floatingElements');
+      for (let i = 0; i < 8; i++) {
+        const element = document.createElement('div');
+        element.classList.add('floating-element');
+        
+        const size = Math.random() * 60 + 20;
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 20 + 10;
+        
+        element.style.width = `${size}px`;
+        element.style.height = `${size}px`;
+        element.style.top = `${top}%`;
+        element.style.left = `${left}%`;
+        element.style.animationDuration = `${duration}s`;
+        
+        floatingContainer.appendChild(element);
+      }
+    }
+
+    // Modal functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize vegetables and floating elements
+      createVegetables();
+      createFloatingElements();
+      
+      // Get modal elements
+      const faceModal = document.getElementById('faceModal');
+      const fingerprintModal = document.getElementById('fingerprintModal');
+      const successModal = document.getElementById('successModal');
+      
+      // Get buttons
+      const faceLoginBtn = document.getElementById('faceLogin');
+      const fingerprintLoginBtn = document.getElementById('fingerprintLogin');
+      const loginForm = document.getElementById('distributor-login-form');
+      const registerBtn = document.getElementById('registerBtn');
+      
+      // Get close buttons
+      const closeFaceModal = document.getElementById('closeFaceModal');
+      const closeFingerprintModal = document.getElementById('closeFingerprintModal');
+      const closeSuccessModal = document.getElementById('closeSuccessModal');
+      
+      // Face recognition login
+      faceLoginBtn.addEventListener('click', function() {
+        faceModal.classList.add('active');
+        
+        // Simulate face recognition progress
+        const progressBar = document.getElementById('faceProgress');
+        let width = 0;
+        const interval = setInterval(() => {
+          if (width >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+              faceModal.classList.remove('active');
+              showSuccessModal();
+            }, 500);
+          } else {
+            width += 5;
+            progressBar.style.width = width + '%';
+          }
+        }, 100);
+      });
+      
+      // Fingerprint login
+      fingerprintLoginBtn.addEventListener('click', function() {
+        fingerprintModal.classList.add('active');
+        
+        // Simulate fingerprint scan progress
+        const progressBar = document.getElementById('fingerprintProgress');
+        let width = 0;
+        const interval = setInterval(() => {
+          if (width >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+              fingerprintModal.classList.remove('active');
+              showSuccessModal();
+            }, 500);
+          } else {
+            width += 10;
+            progressBar.style.width = width + '%';
+          }
+        }, 150);
+      });
+      
+      // Form submission
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const distributorId = document.getElementById('distributorId').value;
+        const securityCode = document.getElementById('securityCode').value;
+        
+        // Simple validation
+        if (distributorId.length < 3) {
+          alert("Please enter a valid distributor ID");
+          return;
+        }
+        
+        if (securityCode.length !== 4 || isNaN(securityCode)) {
+          alert("Please enter a valid 4-digit security code");
+          return;
+        }
+        
+        // Show success modal
+        showSuccessModal();
+      });
+      
+      // Register button
+      registerBtn.addEventListener('click', function() {
+        // In a real app, this would redirect to the registration page
+        alert("Redirecting to distributor registration...");
+        // window.location.href = "distributor_registration.html";
+      });
+      
+      // Show success modal function
+      function showSuccessModal() {
+        successModal.classList.add('active');
+        
+        // Animate progress bar
+        const progressBar = document.getElementById('successProgress');
+        let width = 0;
+        const interval = setInterval(() => {
+          if (width >= 100) {
+            clearInterval(interval);
+            // In a real app, this would redirect to the dashboard
+            setTimeout(() => {
+              alert("Login successful! Redirecting to dashboard...");
+              // window.location.href = "distributor_dashboard.html";
+            }, 500);
+          } else {
+            width += 5;
+            progressBar.style.width = width + '%';
+          }
+        }, 50);
+      }
+      
+      // Close modals
+      closeFaceModal.addEventListener('click', function() {
+        faceModal.classList.remove('active');
+      });
+      
+      closeFingerprintModal.addEventListener('click', function() {
+        fingerprintModal.classList.remove('active');
+      });
+      
+      closeSuccessModal.addEventListener('click', function() {
+        successModal.classList.remove('active');
+      });
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', function(event) {
+        if (event.target === faceModal) {
+          faceModal.classList.remove('active');
+        }
+        if (event.target === fingerprintModal) {
+          fingerprintModal.classList.remove('active');
+        }
+        if (event.target === successModal) {
+          successModal.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

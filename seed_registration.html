@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriChain - Seed Seller Registration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    :root {
+      --primary-green: #0a5c36;
+      --secondary-green: #1a936f;
+      --accent-green: #88d498;
+      --seed-brown: #8B4513;
+      --seed-light: #D2B48C;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a2e1d 0%, #0a5c36 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1597848212624-e6d4bd66d381?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80') no-repeat center center;
+      background-size: cover;
+      opacity: 0.7;
+    }
+
+    .background-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(10, 46, 29, 0.85) 0%, rgba(139, 69, 19, 0.4) 100%);
+    }
+
+    .registration-container {
+      width: 100%;
+      max-width: 500px;
+      z-index: 10;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--seed-brown), var(--seed-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo i {
+      font-size: 36px;
+      color: white;
+    }
+
+    .logo-section h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #ffffff, var(--seed-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-section p {
+      font-size: 16px;
+      color: #c8e6c9;
+    }
+
+    .registration-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .registration-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--seed-brown), var(--seed-light), var(--seed-brown));
+    }
+
+    .welcome-text {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .welcome-text h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .welcome-text p {
+      color: #e8f5e9;
+      font-size: 16px;
+    }
+
+    .registration-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .registration-steps::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: 1;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+      position: relative;
+      width: 33.33%;
+    }
+
+    .step-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .step.active .step-circle {
+      background: var(--seed-brown);
+      box-shadow: 0 0 10px rgba(139, 69, 19, 0.5);
+    }
+
+    .step-label {
+      font-size: 12px;
+      text-align: center;
+      color: #c8e6c9;
+    }
+
+    .step.active .step-label {
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    .form-container {
+      position: relative;
+      min-height: 350px;
+    }
+
+    .form-step {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    .form-step.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #e8f5e9;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--seed-light);
+      box-shadow: 0 0 10px rgba(210, 180, 140, 0.3);
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper::after {
+      content: '\f078';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.7);
+      pointer-events: none;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-prev {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-prev:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-next {
+      background: linear-gradient(to right, var(--seed-brown), var(--seed-light));
+      color: white;
+      box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+    }
+
+    .btn-next:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
+    }
+
+    .btn-submit {
+      background: linear-gradient(to right, var(--seed-brown), var(--seed-light));
+      color: white;
+      width: 100%;
+      box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
+    }
+
+    .biometric-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .biometric-option {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .biometric-option:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-5px);
+    }
+
+    .biometric-option.selected {
+      background: rgba(139, 69, 19, 0.2);
+      border-color: var(--seed-brown);
+    }
+
+    .biometric-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+    }
+
+    .biometric-icon i {
+      font-size: 24px;
+      color: var(--seed-light);
+    }
+
+    .biometric-text h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .biometric-text p {
+      font-size: 12px;
+      color: #c8e6c9;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #c8e6c9;
+      font-size: 14px;
+    }
+
+    /* Seed Animation */
+    .seeds-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .seed {
+      position: absolute;
+      top: -50px;
+      font-size: 20px;
+      color: rgba(210, 180, 140, 0.7);
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 450px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(139, 69, 19, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .modal-icon i {
+      font-size: 36px;
+      color: var(--seed-light);
+    }
+
+    .modal h3 {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    .modal p {
+      color: #e8f5e9;
+      margin-bottom: 25px;
+    }
+
+    .scan-animation {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 20px;
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--seed-light), transparent);
+      animation: scan 2s linear infinite;
+    }
+
+    @keyframes scan {
+      0% {
+        top: 0;
+      }
+      100% {
+        top: 100%;
+      }
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(to right, var(--seed-brown), var(--seed-light));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .close-modal {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 10px 20px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .close-modal:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Seed-themed floating elements */
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .floating-element {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 180, 140, 0.1);
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+      }
+      100% {
+        transform: translateY(0) rotate(360deg);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 576px) {
+      .registration-card {
+        padding: 20px;
+      }
+      
+      .biometric-options {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background with Image -->
+  <div class="background-container">
+    <div class="background-image"></div>
+    <div class="background-overlay"></div>
+  </div>
+
+  <!-- Falling Seeds -->
+  <div class="seeds-container" id="seedsContainer"></div>
+
+  <!-- Floating Elements -->
+  <div class="floating-elements" id="floatingElements"></div>
+
+  <!-- Registration Container -->
+  <div class="registration-container">
+    <div class="logo-section">
+      <div class="logo">
+        <i class="fas fa-seedling"></i>
+      </div>
+      <h1>AgriChain</h1>
+      <p>Seed Seller Registration</p>
+    </div>
+
+    <div class="registration-card">
+      <div class="welcome-text">
+        <h2>Join Our Seed Supplier Network</h2>
+        <p>Register in just a few simple steps</p>
+      </div>
+
+      <!-- Registration Steps -->
+      <div class="registration-steps">
+        <div class="step active" data-step="1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Business Info</div>
+        </div>
+        <div class="step" data-step="2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Seed Details</div>
+        </div>
+        <div class="step" data-step="3">
+          <div class="step-circle">3</div>
+          <div class="step-label">Security Setup</div>
+        </div>
+      </div>
+
+      <!-- Form Steps -->
+      <div class="form-container">
+        <!-- Step 1: Business Information -->
+        <div class="form-step active" id="step-1">
+          <div class="form-group">
+            <label for="businessName">Business Name</label>
+            <input type="text" id="businessName" class="form-control" placeholder="Enter your business name">
+          </div>
+
+          <div class="form-group">
+            <label for="contactPerson">Contact Person</label>
+            <input type="text" id="contactPerson" class="form-control" placeholder="Enter contact person name">
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="tel" id="phoneNumber" class="form-control" placeholder="Enter your phone number">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" class="form-control" placeholder="Enter your email address">
+          </div>
+
+          <div class="form-group">
+            <label for="location">Business Location</label>
+            <input type="text" id="location" class="form-control" placeholder="Enter your business address">
+          </div>
+
+          <div class="form-actions">
+            <div></div> <!-- Empty div for spacing -->
+            <button class="btn btn-next" data-next="2">Next <i class="fas fa-arrow-right ml-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Step 2: Seed Details -->
+        <div class="form-step" id="step-2">
+          <div class="form-group">
+            <label for="seedTypes">Seed Types You Supply</label>
+            <input type="text" id="seedTypes" class="form-control" placeholder="e.g., Wheat, Rice, Vegetables">
+          </div>
+
+          <div class="form-group">
+            <label for="certifications">Certifications</label>
+            <select id="certifications" class="form-control">
+              <option value="">Select certifications</option>
+              <option value="organic">Organic Certified</option>
+              <option value="non-gmo">Non-GMO Verified</option>
+              <option value="iso">ISO Certified</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="yearsExperience">Years in Business</label>
+            <input type="number" id="yearsExperience" class="form-control" placeholder="Enter years of experience">
+          </div>
+
+          <div class="form-group">
+            <label for="supplyCapacity">Monthly Supply Capacity (kg)</label>
+            <input type="number" id="supplyCapacity" class="form-control" placeholder="Enter your supply capacity">
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-prev" data-prev="1"><i class="fas fa-arrow-left mr-2"></i> Previous</button>
+            <button class="btn btn-next" data-next="3">Next <i class="fas fa-arrow-right ml-2"></i></button>
+          </div>
+        </div>
+
+        <!-- Step 3: Security Setup -->
+        <div class="form-step" id="step-3">
+          <div class="form-group">
+            <label>Choose Your Preferred Login Method</label>
+            <p style="font-size: 14px; color: #c8e6c9; margin-bottom: 15px;">Select one or both methods for easy login</p>
+            
+            <div class="biometric-options">
+              <div class="biometric-option" data-type="face">
+                <div class="biometric-icon">
+                  <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="biometric-text">
+                  <h3>Face Recognition</h3>
+                  <p>Look at camera to login</p>
+                </div>
+              </div>
+
+              <div class="biometric-option" data-type="fingerprint">
+                <div class="biometric-icon">
+                  <i class="fas fa-fingerprint"></i>
+                </div>
+                <div class="biometric-text">
+                  <h3>Fingerprint Scan</h3>
+                  <p>Use fingerprint to login</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="securityCode">Create Security Code</label>
+            <input type="password" id="securityCode" class="form-control" placeholder="Create a 4-digit security code">
+            <p style="font-size: 12px; color: #c8e6c9; margin-top: 5px;">Use this code for manual login if needed</p>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="terms" style="margin-right: 8px;">
+              I agree to the <a href="#" style="color: var(--seed-light);">Terms of Service</a> and <a href="#" style="color: var(--seed-light);">Privacy Policy</a>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-prev" data-prev="2"><i class="fas fa-arrow-left mr-2"></i> Previous</button>
+            <button class="btn btn-submit" id="submitRegistration">Complete Registration</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Already have an account? <a href="seed_login.html" style="color: var(--seed-light);">Login here</a></p>
+      <p style="margin-top: 10px;">AgriChain &copy; 2023 | Redefining Trust in the Foodchain</p>
+    </div>
+  </div>
+
+  <!-- Face Registration Modal -->
+  <div class="modal" id="faceModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-user-circle"></i>
+      </div>
+      <h3>Face Registration</h3>
+      <p>Please look directly at the camera</p>
+      
+      <div class="scan-animation">
+        <div class="scan-line"></div>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress" id="faceProgress"></div>
+      </div>
+      
+      <button class="close-modal" id="closeFaceModal">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Fingerprint Registration Modal -->
+  <div class="modal" id="fingerprintModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-fingerprint"></i>
+      </div>
+      <h3>Fingerprint Registration</h3>
+      <p>Place your finger on the sensor multiple times</p>
+      
+      <div class="scan-animation">
+        <div class="scan-line"></div>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress" id="fingerprintProgress"></div>
+      </div>
+      
+      <button class="close-modal" id="closeFingerprintModal">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Registration Successful!</h3>
+      <p>Welcome to the AgriChain Seed Supplier Network</p>
+      <p style="font-size: 14px; margin-top: 10px;">You will be redirected to your dashboard shortly</p>
+      
+      <div class="progress-bar">
+        <div class="progress" id="successProgress"></div>
+      </div>
+      
+      <button class="close-modal" id="closeSuccessModal" style="display: none;">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Create falling seeds
+    function createSeeds() {
+      const seedsContainer = document.getElementById('seedsContainer');
+      const seedIcons = ['🌱', '🌾', '🫘', '🥜', '🌰'];
+      
+      function createSeed() {
+        const seed = document.createElement('div');
+        seed.classList.add('seed');
+        seed.innerHTML = seedIcons[Math.floor(Math.random() * seedIcons.length)];
+        
+        // Random position and animation duration
+        const leftPos = Math.random() * 100;
+        const duration = 10 + Math.random() * 20; // Between 10-30 seconds
+        
+        seed.style.left = `${leftPos}%`;
+        seed.style.animationDuration = `${duration}s`;
+        
+        // Random delay
+        seed.style.animationDelay = `${Math.random() * 5}s`;
+        
+        seedsContainer.appendChild(seed);
+        
+        // Remove seed after animation completes
+        setTimeout(() => {
+          seed.remove();
+        }, duration * 1000);
+      }
+      
+      // Create seeds periodically
+      setInterval(createSeed, 800);
+    }
+
+    // Create floating elements
+    function createFloatingElements() {
+      const floatingContainer = document.getElementById('floatingElements');
+      for (let i = 0; i < 8; i++) {
+        const element = document.createElement('div');
+        element.classList.add('floating-element');
+        
+        const size = Math.random() * 60 + 20;
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 20 + 10;
+        
+        element.style.width = `${size}px`;
+        element.style.height = `${size}px`;
+        element.style.top = `${top}%`;
+        element.style.left = `${left}%`;
+        element.style.animationDuration = `${duration}s`;
+        
+        floatingContainer.appendChild(element);
+      }
+    }
+
+    // Registration functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize seeds and floating elements
+      createSeeds();
+      createFloatingElements();
+      
+      // Step navigation
+      const steps = document.querySelectorAll('.step');
+      const formSteps = document.querySelectorAll('.form-step');
+      const nextButtons = document.querySelectorAll('.btn-next');
+      const prevButtons = document.querySelectorAll('.btn-prev');
+      const biometricOptions = document.querySelectorAll('.biometric-option');
+      
+      // Set active step
+      function setActiveStep(stepNumber) {
+        // Update step indicators
+        steps.forEach(step => {
+          if (parseInt(step.dataset.step) === stepNumber) {
+            step.classList.add('active');
+          } else {
+            step.classList.remove('active');
+          }
+        });
+        
+        // Update form steps
+        formSteps.forEach(step => {
+          if (step.id === `step-${stepNumber}`) {
+            step.classList.add('active');
+          } else {
+            step.classList.remove('active');
+          }
+        });
+      }
+      
+      // Next button click
+      nextButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const nextStep = parseInt(this.dataset.next);
+          setActiveStep(nextStep);
+        });
+      });
+      
+      // Previous button click
+      prevButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const prevStep = parseInt(this.dataset.prev);
+          setActiveStep(prevStep);
+        });
+      });
+      
+      // Biometric option selection
+      biometricOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          this.classList.toggle('selected');
+          
+          const type = this.dataset.type;
+          if (this.classList.contains('selected')) {
+            // Open registration modal for the selected biometric
+            if (type === 'face') {
+              openFaceRegistration();
+            } else if (type === 'fingerprint') {
+              openFingerprintRegistration();
+            }
+          }
+        });
+      });
+      
+      // Face registration modal
+      function openFaceRegistration() {
+        const modal = document.getElementById('faceModal');
+        modal.classList.add('active');
+        
+        // Simulate face registration progress
+        const progressBar = document.getElementById('faceProgress');
+        let width = 0;
+        const interval = setInterval(() => {
+          if (width >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+              modal.classList.remove('active');
+              alert("Face registration completed successfully!");
+            }, 500);
+          } else {
+            width += 5;
+            progressBar.style.width = width + '%';
+          }
+        }, 100);
+      }
+      
+      // Fingerprint registration modal
+      function openFingerprintRegistration() {
+        const modal = document.getElementById('fingerprintModal');
+        modal.classList.add('active');
+        
+        // Simulate fingerprint registration progress
+        const progressBar = document.getElementById('fingerprintProgress');
+        let width = 0;
+        const interval = setInterval(() => {
+          if (width >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+              modal.classList.remove('active');
+              alert("Fingerprint registration completed successfully!");
+            }, 500);
+          } else {
+            width += 10;
+            progressBar.style.width = width + '%';
+          }
+        }, 150);
+      }
+      
+      // Form submission
+      document.getElementById('submitRegistration').addEventListener('click', function() {
+        const termsChecked = document.getElementById('terms').checked;
+        const securityCode = document.getElementById('securityCode').value;
+        
+        if (!termsChecked) {
+          alert("Please agree to the Terms of Service and Privacy Policy");
+          return;
+        }
+        
+        if (securityCode.length !== 4 || isNaN(securityCode)) {
+          alert("Please enter a valid 4-digit security code");
+          return;
+        }
+        
+        // Show success modal
+        const successModal = document.getElementById('successModal');
+        successModal.classList.add('active');
+        
+        // Animate progress bar
+        const progressBar = document.getElementById('successProgress');
+        let width = 0;
+        const interval = setInterval(() => {
+          if (width >= 100) {
+            clearInterval(interval);
+            // In a real app, this would redirect to the dashboard
+            setTimeout(() => {
+              alert("Registration complete! Redirecting to dashboard...");
+              // window.location.href = "seed_dashboard.html";
+            }, 500);
+          } else {
+            width += 5;
+            progressBar.style.width = width + '%';
+          }
+        }, 50);
+      });
+      
+      // Close modals
+      document.getElementById('closeFaceModal').addEventListener('click', function() {
+        document.getElementById('faceModal').classList.remove('active');
+        document.querySelector('.biometric-option[data-type="face"]').classList.remove('selected');
+      });
+      
+      document.getElementById('closeFingerprintModal').addEventListener('click', function() {
+        document.getElementById('fingerprintModal').classList.remove('active');
+        document.querySelector('.biometric-option[data-type="fingerprint"]').classList.remove('selected');
+      });
+      
+      document.getElementById('closeSuccessModal').addEventListener('click', function() {
+        document.getElementById('successModal').classList.remove('active');
+      });
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', function(event) {
+        if (event.target === document.getElementById('faceModal')) {
+          document.getElementById('faceModal').classList.remove('active');
+          document.querySelector('.biometric-option[data-type="face"]').classList.remove('selected');
+        }
+        if (event.target === document.getElementById('fingerprintModal')) {
+          document.getElementById('fingerprintModal').classList.remove('active');
+          document.querySelector('.biometric-option[data-type="fingerprint"]').classList.remove('selected');
+        }
+        if (event.target === document.getElementById('successModal')) {
+          document.getElementById('successModal').classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriChain - Food Journey Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    :root {
+      --primary-green: #0a5c36;
+      --secondary-green: #1a936f;
+      --accent-green: #88d498;
+      --tomato-red: #FF6347;
+      --tomato-light: #FF7F50;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a2e1d 0%, #0a5c36 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80') no-repeat center center;
+      background-size: cover;
+      opacity: 0.7;
+    }
+
+    .background-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(10, 46, 29, 0.85) 0%, rgba(255, 99, 71, 0.4) 100%);
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--tomato-red), var(--tomato-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo i {
+      font-size: 36px;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #ffffff, var(--tomato-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header p {
+      font-size: 16px;
+      color: #c8e6c9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Main Journey Section */
+    .journey-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .journey-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--tomato-red), var(--tomato-light), var(--tomato-red));
+    }
+
+    .journey-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .journey-title h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .journey-title p {
+      color: #e8f5e9;
+      font-size: 14px;
+    }
+
+    /* Journey Path */
+    .journey-path {
+      position: relative;
+      height: 240px;
+      margin: 20px 0;
+    }
+
+    .path-line {
+      position: absolute;
+      top: 85%;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary-green), var(--secondary-green), var(--accent-green));
+      z-index: 1;
+    }
+
+    /* Journey Steps */
+    .journey-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 40px;
+    }
+
+    .step {
+      text-align: center;
+      width: 16%;
+      position: relative;
+    }
+
+    .step-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .step.active .step-icon {
+      background: rgba(255, 99, 71, 0.3);
+      border-color: var(--tomato-red);
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(255, 99, 71, 0.5);
+    }
+
+    .step-icon i {
+      font-size: 36px;
+      color: var(--tomato-light);
+    }
+
+    .step-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    /* Truck Container */
+    .truck-container {
+      position: absolute;
+      top: 80%;
+      left: 0;
+      transform: translateY(-50%);
+      z-index: 3;
+      transition: left 1.5s ease-in-out;
+    }
+
+    .truck-image {
+      width: 120px;
+      height: auto;
+      transform: translateX(-50%);
+    }
+
+    /* Control Buttons */
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 40px 0 20px;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      min-width: 150px;
+    }
+
+    .btn-prev {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-prev:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-prev:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-next {
+      background: linear-gradient(to right, var(--tomato-red), var(--tomato-light));
+      color: white;
+      box-shadow: 0 5px 15px rgba(255, 99, 71, 0.3);
+    }
+
+    .btn-next:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 99, 71, 0.4);
+    }
+
+    .btn-next:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-reset {
+      background: linear-gradient(to right, var(--secondary-green), var(--accent-green));
+      color: white;
+      box-shadow: 0 5px 15px rgba(26, 147, 111, 0.3);
+    }
+
+    .btn-reset:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(26, 147, 111, 0.4);
+    }
+
+    /* Step Details */
+    .step-details {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .step-details h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--tomato-light);
+    }
+
+    .step-details p {
+      font-size: 18px;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .detail-list {
+      list-style: none;
+      padding-left: 0;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .detail-list li {
+      margin-bottom: 10px;
+      padding-left: 25px;
+      position: relative;
+      font-size: 16px;
+    }
+
+    .detail-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--tomato-light);
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      padding: 15px 0;
+      color: #c8e6c9;
+      font-size: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Floating Elements */
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floating-element {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 99, 71, 0.1);
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-15px) rotate(180deg);
+      }
+      100% {
+        transform: translateY(0) rotate(360deg);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .journey-path {
+        height: 200px;
+      }
+      
+      .step-icon {
+        width: 70px;
+        height: 70px;
+      }
+      
+      .step-icon i {
+        font-size: 28px;
+      }
+      
+      .step-title {
+        font-size: 14px;
+      }
+      
+      .truck-image {
+        width: 100px;
+      }
+      
+      .btn {
+        padding: 12px 20px;
+        min-width: 120px;
+        font-size: 14px;
+      }
+      
+      .step-details h3 {
+        font-size: 24px;
+      }
+      
+      .step-details p {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background with Image -->
+  <div class="background-container">
+    <div class="background-image"></div>
+    <div class="background-overlay"></div>
+  </div>
+
+  <!-- Floating Elements -->
+  <div class="floating-elements" id="floatingElements"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <i class="fas fa-seedling"></i>
+      </div>
+      <h1>Track Your Food Journey</h1>
+      <p>Discover the complete story of your food from seed to plate with complete transparency</p>
+    </div>
+
+    <!-- Journey Section -->
+    <div class="journey-section">
+      <div class="journey-title">
+        <h2>The Journey of a Tomato</h2>
+        <p>Follow the complete lifecycle of your tomato from planting to your plate</p>
+      </div>
+
+      <!-- Journey Path -->
+      <div class="journey-path">
+        <!-- Journey Steps -->
+        <div class="journey-steps">
+          <!-- Step 1: Seed Seller -->
+          <div class="step active" data-step="1">
+            <div class="step-icon">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <div class="step-title text">Seed Seller</div>
+
+          </div>
+
+          <!-- Step 2: Farmer -->
+          <div class="step" data-step="2">
+            <div class="step-icon">
+              <i class="fas fa-tractor"></i>
+            </div>
+            <div class="step-title">Farmer</div>
+          </div>
+
+          <!-- Step 3: Fertilizer Seller -->
+          <div class="step" data-step="3">
+            <div class="step-icon">
+              <i class="fas fa-flask"></i>
+            </div>
+            <div class="step-title">Fertilizer</div>
+          </div>
+
+          <!-- Step 4: Distributor -->
+          <div class="step" data-step="4">
+            <div class="step-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <div class="step-title">Distributor</div>
+          </div>
+
+          <!-- Step 5: Vendor -->
+          <div class="step" data-step="5">
+            <div class="step-icon">
+              <i class="fas fa-store"></i>
+            </div>
+            <div class="step-title">Vendor</div>
+          </div>
+
+          <!-- Step 6: Consumer -->
+          <div class="step" data-step="6">
+            <div class="step-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <div class="step-title">Your Plate</div>
+          </div>
+        </div>
+
+        <!-- Road Line -->
+        <div class="path-line"></div>
+        
+        <!-- Truck Container -->
+        <div class="truck-container" id="truckContainer">
+          <!-- Replace the src with your truck.png image -->
+          <img src="truck.png" alt="Truck" class="truck-image">
+        </div>
+      </div>
+
+      <!-- Control Buttons -->
+      <div class="controls">
+        <button class="btn btn-prev" id="prevBtn">
+          <i class="fas fa-arrow-left"></i> Previous
+        </button>
+        <button class="btn btn-next" id="nextBtn">
+          Next <i class="fas fa-arrow-right"></i>
+        </button>
+        <button class="btn btn-reset" id="resetBtn">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Step Details -->
+    <div class="step-details" id="stepDetails">
+      <h3>Seed Seller: Organic Tomato Seeds</h3>
+      <p>Your tomato journey begins with certified organic seeds from our trusted seed suppliers.</p>
+      <ul class="detail-list">
+        <li>Seed Type: Organic Heirloom Tomato</li>
+        <li>Certification: NPOP Organic Certified</li>
+        <li>Supplier: Green Valley Seeds Co.</li>
+        <li>Planting Date: March 15, 2025</li>
+        <li>Germination Rate: 95%</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>AgriChain &copy; 2025 | Redefining Trust in the Foodchain</p>
+      <p style="margin-top: 10px;">Know Your Food. Trust Your Food.</p>
+    </div>
+  </div>
+
+  <script>
+    // Current step tracking
+    let currentStep = 1;
+    const totalSteps = 6;
+
+    // DOM Elements
+    const truckContainer = document.getElementById('truckContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const stepDetails = document.getElementById('stepDetails');
+
+    // Step details content
+    const stepDetailsContent = [
+      {
+        title: "Seed Seller: Organic Tomato Seeds",
+        description: "Your tomato journey begins with certified organic seeds from our trusted seed suppliers.",
+        details: [
+          "Seed Type: Organic Heirloom Tomato",
+          "Certification: USDA Organic Certified",
+          "Supplier: Green Valley Seeds Co.",
+          "Planting Date: March 15, 2025",
+          "Germination Rate: 95%"
+        ]
+      },
+      {
+        title: "Farmer: Shrikant",
+        description: "Our partner farmers use sustainable agricultural practices to grow healthy, delicious tomatoes.",
+        details: [
+          "Farm: Sunshine Organic Farms",
+          "Location: Ghulewadi,Sangamner,Maharashtra",
+          "Farming Method: Regenerative Agriculture",
+          "Water Source: Drip Irrigation",
+          "Harvest Date: June 20, 2025"
+        ]
+      },
+      {
+        title: "Fertilizer: Natural Nutrients",
+        description: "Only organic, certified fertilizers are used to nourish the tomato plants.",
+        details: [
+          "Fertilizer Type: Compost & Worm Castings",
+          "Application: Every 3 weeks",
+          "Pest Control: Natural Predators",
+          "Soil Health: Regular Testing",
+          "Certification: OMRI Listed"
+        ]
+      },
+      {
+        title: "Distributor: Safe Transportation",
+        description: "Your tomatoes are transported in temperature-controlled vehicles to maintain freshness.",
+        details: [
+          "Transport: Refrigerated Trucks",
+          "Temperature: 55°F (13°C)",
+          "Transit Time: 2 days",
+          "Carbon Footprint: 0.8 kg CO2 per kg",
+          "Delivery Date: June 22, 2025"
+        ]
+      },
+      {
+        title: "Vendor: Fresh Market Display",
+        description: "Local vendors ensure your tomatoes are displayed properly and sold at peak freshness.",
+        details: [
+          "Store: Fresh Market Grocers",
+          "Location: Nashik,Maharashtra",
+          "Storage: Climate-controlled display",
+          "Shelf Life: 5-7 days remaining",
+          "Price: 20Rs. Per Kg "
+        ]
+      },
+      {
+        title: "Your Plate: Fresh & Safe",
+        description: "Your tomato has completed its journey and is ready to be part of your healthy meal.",
+        details: [
+          "Total Travel Distance: 75 K.M.",
+          "Carbon Footprint: 1.2 kg CO2 total",
+          "Quality Rating: Premium Grade A",
+          "Nutrition: Rich in Vitamin C & Lycopene",
+          "Food Safety: Passed all quality checks"
+        ]
+      }
+    ];
+
+    // Calculate truck positions for each step
+    function calculateTruckPosition(step) {
+      const stepWidth = 100 / (totalSteps - 1);
+      return (step - 1) * stepWidth;
+    }
+
+    // Update the journey display
+    function updateJourney(step) {
+      // Update active step
+      document.querySelectorAll('.step').forEach((stepEl, index) => {
+        if (index + 1 === step) {
+          stepEl.classList.add('active');
+        } else {
+          stepEl.classList.remove('active');
+        }
+      });
+
+      // Update truck position
+      const position = calculateTruckPosition(step);
+      truckContainer.style.left = `${position}%`;
+
+      // Update step details
+      const detail = stepDetailsContent[step - 1];
+      stepDetails.innerHTML = `
+        <h3>${detail.title}</h3>
+        <p>${detail.description}</p>
+        <ul class="detail-list">
+          ${detail.details.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      `;
+
+      // Update button states
+      prevBtn.disabled = step === 1;
+      nextBtn.disabled = step === totalSteps;
+    }
+
+    // Next button click
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < totalSteps) {
+        currentStep++;
+        updateJourney(currentStep);
+      }
+    });
+
+    // Previous button click
+    prevBtn.addEventListener('click', () => {
+      if (currentStep > 1) {
+        currentStep--;
+        updateJourney(currentStep);
+      }
+    });
+
+    // Reset button click
+    resetBtn.addEventListener('click', () => {
+      currentStep = 1;
+      updateJourney(currentStep);
+    });
+
+    // Step click navigation
+    document.querySelectorAll('.step').forEach((stepEl, index) => {
+      stepEl.addEventListener('click', () => {
+        currentStep = index + 1;
+        updateJourney(currentStep);
+      });
+    });
+
+    // Create floating elements
+    function createFloatingElements() {
+      const floatingContainer = document.getElementById('floatingElements');
+      for (let i = 0; i < 12; i++) {
+        const element = document.createElement('div');
+        element.classList.add('floating-element');
+        
+        const size = Math.random() * 60 + 20;
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 20 + 10;
+        
+        element.style.width = `${size}px`;
+        element.style.height = `${size}px`;
+        element.style.top = `${top}%`;
+        element.style.left = `${left}%`;
+        element.style.animationDuration = `${duration}s`;
+        
+        floatingContainer.appendChild(element);
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      createFloatingElements();
+      updateJourney(currentStep);
+    });
+  </script>
+</body>
+</html>
