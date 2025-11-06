@@ -1,0 +1,579 @@
+<!-- To get your **logs section working while maintaining the UI and design system**,
+you need to: - Store submitted production data in a log array. - Render this log
+array as cards within the logs section. - Make sure your `form` has the correct
+`id` (should match `getElementById("farmerForm")`). - On form submission, push
+the entered data to logs, and show logs when you switch to the logs tab. Below
+is your corrected code. **Key Fixes:** - Changed `productionForm` to
+`farmerForm` for form id. - Implemented in-memory logs with rendering. - Show
+all input values—including product name and photo count—in the logs section. -
+Ensured UI matches glassmorphism and your spacing/theme. *** ```html -->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- ...meta, tailwind, and styles (as in your code)... -->
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>AgriChain | Farmer Dashboard</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: "#0a5c36",
+							secondary: "#1a936f",
+							accent: "#88d498",
+							tomato: "#FF6347",
+							tomatoLight: "#FF7F50",
+						},
+						fontFamily: {
+							montserrat: [
+								"Montserrat",
+								"sans-serif",
+							],
+						},
+						backgroundImage: {
+							"dashboard-gradient":
+								"linear-gradient(135deg, #0a2e1d 0%, #0a5c36 100%)",
+						},
+					},
+				},
+			};
+		</script>
+		<style>
+			body {
+				font-family: "Montserrat", sans-serif;
+				background: linear-gradient(
+					135deg,
+					#0a2e1d 0%,
+					#0a5c36 100%
+				);
+				color: white;
+				min-height: 100vh;
+			}
+			.glass-card {
+				background: rgba(255, 255, 255, 0.1);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				backdrop-filter: blur(15px);
+				border-radius: 20px;
+				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+			}
+			.gradient-text {
+				background: linear-gradient(
+					90deg,
+					#88d498,
+					#1a936f
+				);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+			.photo-grid {
+				display: grid;
+				grid-template-columns: repeat(
+					auto-fill,
+					minmax(100px, 1fr)
+				);
+				gap: 1rem;
+			}
+		</style>
+	</head>
+	<body class="flex flex-col items-center p-6">
+		<!-- Header (your code unchanged) -->
+
+		<header
+			class="w-full max-w-6xl flex justify-between items-center mb-10"
+		>
+			<h1 class="text-3xl font-bold gradient-text">
+				Farmer Dashboard
+			</h1>
+			<nav class="flex gap-6 text-sm font-medium">
+				<button
+					id="dashboardTab"
+					class="hover:text-accent"
+				>
+					Dashboard
+				</button>
+				<button id="logsTab" class="hover:text-accent">
+					Logs
+				</button>
+			</nav>
+			<div class="flex items-center gap-4">
+				<img
+					src="https://via.placeholder.com/50"
+					alt="Farmer Photo"
+					class="w-12 h-12 rounded-full border-2 border-accent object-cover"
+				/>
+				<div>
+					<p class="font-semibold text-accent">
+						Welcome, Rajesh Kumar
+					</p>
+					<a
+						href="#"
+						class="text-xs text-gray-300 hover:text-accent"
+						>Logout</a
+					>
+				</div>
+			</div>
+		</header>
+
+		<!-- Main Content ('Dashboard') -->
+		<main
+			class="w-full max-w-5xl glass-card p-8 md:p-10 space-y-8"
+			id="dashboardSection"
+		>
+			<!-- Farmer Info -->
+			<section class="space-y-2">
+				<h2 class="text-xl font-semibold gradient-text">
+					Farmer Details
+				</h2>
+				<div
+					class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6"
+				>
+					<div>
+						<span class="font-semibold"
+							>Name:</span
+						>
+						<span id="farmerNameDisplay"
+							>Suresh Kumar</span
+						>
+					</div>
+					<div>
+						<span class="font-semibold"
+							>Aadhar:</span
+						>
+						<span id="aadharDisplay"
+							>1234-5678-9012</span
+						>
+					</div>
+					<div>
+						<span class="font-semibold"
+							>Farm Size:</span
+						>
+						<span id="farmSizeDisplay"
+							>5 acres</span
+						>
+					</div>
+					<div>
+						<span class="font-semibold"
+							>Farm Location:</span
+						>
+						<span id="farmLocationDisplay"
+							>Village XYZ, District
+							ABC</span
+						>
+					</div>
+				</div>
+			</section>
+
+			<!-- Form Section -->
+			<section>
+				<h2
+					class="text-xl font-semibold gradient-text mb-6"
+				>
+					Production Phase Inputs
+				</h2>
+				<form
+					id="farmerForm"
+					class="space-y-6"
+					autocomplete="off"
+				>
+					<div>
+						<label
+							for="productName"
+							class="block mb-2 font-medium"
+							>Name of Product</label
+						>
+						<input
+							type="text"
+							id="productName"
+							placeholder="Enter product name (e.g., Tomato, Wheat)"
+							required
+							class="w-full rounded-lg p-3 bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+						/>
+					</div>
+					<div class="grid md:grid-cols-2 gap-6">
+						<div>
+							<label
+								for="seedingDate"
+								class="block mb-2 font-medium"
+								>Date of
+								Seeding</label
+							>
+							<input
+								type="date"
+								id="seedingDate"
+								required
+								class="w-full rounded-lg p-3 bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+							/>
+						</div>
+						<div>
+							<label
+								for="harvestingDate"
+								class="block mb-2 font-medium"
+								>Date of
+								Harvesting</label
+							>
+							<input
+								type="date"
+								id="harvestingDate"
+								required
+								class="w-full rounded-lg p-3 bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+							/>
+						</div>
+					</div>
+					<div>
+						<label
+							for="totalYield"
+							class="block mb-2 font-medium"
+							>Total Yield Obtained
+							(kg)</label
+						>
+						<input
+							type="number"
+							id="totalYield"
+							min="0"
+							step="any"
+							required
+							placeholder="Enter total yield"
+							class="w-full rounded-lg p-3 bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+						/>
+					</div>
+					<div>
+						<label
+							for="cropPhotos"
+							class="block mb-2 font-medium"
+						>
+							Upload Crop Photos (up
+							to 10)
+						</label>
+						<input
+							type="file"
+							id="cropPhotos"
+							accept="image/*"
+							multiple
+							required
+							class="w-full text-white"
+							aria-describedby="photoHelp"
+						/>
+						<p
+							id="photoHelp"
+							class="text-xs text-gray-300 mt-1"
+						>
+							Upload clear photos for
+							quality analysis.
+						</p>
+						<div
+							id="photoPreview"
+							class="photo-grid mt-4"
+						></div>
+					</div>
+					<!-- System Placeholders: unchanged -->
+					<section class="space-y-4 mt-8">
+						<h3
+							class="text-lg font-semibold gradient-text"
+						>
+							System Validations &
+							Predictions
+						</h3>
+						<div
+							id="shelfLifeCheck"
+							class="glass-card p-4"
+						>
+							<h4
+								class="font-semibold mb-2"
+							>
+								1. Seed
+								Shelf-Life
+								Verification
+							</h4>
+							<p
+								class="text-gray-300 italic"
+							>
+								Model output
+								placeholder:
+								Verify seeding
+								date validity
+								using seed shelf
+								life.
+							</p>
+						</div>
+						<div
+							id="harvestDurationCheck"
+							class="glass-card p-4"
+						>
+							<h4
+								class="font-semibold mb-2"
+							>
+								2. Harvest
+								Duration
+								Validation
+							</h4>
+							<p
+								class="text-gray-300 italic"
+							>
+								Model output
+								placeholder:
+								Compare actual
+								and predicted
+								harvest periods.
+							</p>
+						</div>
+						<div
+							id="yieldPredictionModel"
+							class="glass-card p-4"
+						>
+							<h4
+								class="font-semibold mb-2"
+							>
+								3. Yield
+								Prediction Model
+							</h4>
+							<p
+								class="text-gray-300 italic"
+							>
+								Model output
+								placeholder:
+								Predict yield
+								using seed type,
+								farm size, and
+								weather.
+							</p>
+						</div>
+						<div
+							id="qualityPredictionModel"
+							class="glass-card p-4"
+						>
+							<h4
+								class="font-semibold mb-2"
+							>
+								4. Quality
+								Predictor Model
+							</h4>
+							<p
+								class="text-gray-300 italic"
+							>
+								Model output
+								placeholder:
+								Analyze uploaded
+								crop images for
+								quality scoring.
+							</p>
+						</div>
+					</section>
+					<div class="flex justify-end mt-6">
+						<button
+							type="submit"
+							class="bg-tomato hover:bg-tomatoLight text-white px-6 py-3 rounded-lg font-semibold shadow-md transition"
+						>
+							Submit Production Data
+						</button>
+					</div>
+				</form>
+			</section>
+		</main>
+
+		<!-- Logs Section -->
+		<section
+			id="logsSection"
+			class="w-full max-w-5xl glass-card p-8 md:p-10 hidden"
+		>
+			<h2 class="text-2xl font-semibold mb-6 gradient-text">
+				Production Logs
+			</h2>
+			<div id="logsContainer" class="space-y-4 text-sm">
+				<p class="text-gray-300">
+					No logs found. Start recording
+					production data.
+				</p>
+			</div>
+		</section>
+
+		<footer class="text-xs text-gray-300 mt-10">
+			© 2025 AgriChain | Ensuring Honest & Traceable
+			Production
+		</footer>
+
+		<script>
+			// UI Tab logic
+			const dashboardSection =
+				document.getElementById("dashboardSection");
+			const logsSection =
+				document.getElementById("logsSection");
+			const dashboardTab =
+				document.getElementById("dashboardTab");
+			const logsTab = document.getElementById("logsTab");
+			const logsContainer =
+				document.getElementById("logsContainer");
+
+			dashboardTab.onclick = () => {
+				dashboardSection.classList.remove("hidden");
+				logsSection.classList.add("hidden");
+				dashboardTab.classList.add(
+					"text-accent",
+					"underline"
+				);
+				logsTab.classList.remove(
+					"text-accent",
+					"underline"
+				);
+			};
+
+			logsTab.onclick = () => {
+				dashboardSection.classList.add("hidden");
+				logsSection.classList.remove("hidden");
+				logsTab.classList.add(
+					"text-accent",
+					"underline"
+				);
+				dashboardTab.classList.remove(
+					"text-accent",
+					"underline"
+				);
+				renderLogs();
+			};
+
+			// In-memory logs array
+			const logs = [];
+
+			// Photo preview logic: unchanged
+			const inputPhotos =
+				document.getElementById("cropPhotos");
+			const photoPreview =
+				document.getElementById("photoPreview");
+			inputPhotos.addEventListener("change", () => {
+				photoPreview.innerHTML = "";
+				const files = inputPhotos.files;
+				if (!files.length) return;
+				const maxFiles = 10;
+				for (
+					let i = 0;
+					i < Math.min(files.length, maxFiles);
+					i++
+				) {
+					const file = files[i];
+					if (!file.type.startsWith("image/"))
+						continue;
+					const img =
+						document.createElement("img");
+					img.className =
+						"rounded-lg object-cover w-full h-24";
+					img.title = file.name;
+					const reader = new FileReader();
+					reader.onload = (e) =>
+						(img.src = e.target.result);
+					reader.readAsDataURL(file);
+					photoPreview.appendChild(img);
+				}
+			});
+
+			// Form submission pushes to logs
+			document.getElementById("farmerForm").onsubmit = (
+				e
+			) => {
+				e.preventDefault();
+				// Get input values
+				const productName = document
+					.getElementById("productName")
+					.value.trim();
+				const seedingDate =
+					document.getElementById(
+						"seedingDate"
+					).value;
+				const harvestingDate =
+					document.getElementById(
+						"harvestingDate"
+					).value;
+				const totalYield =
+					document.getElementById(
+						"totalYield"
+					).value;
+				const photosCount =
+					document.getElementById("cropPhotos")
+						.files.length;
+
+				// You may want to check validity here too
+
+				// Farmer details
+				const farmerName =
+					document.getElementById(
+						"farmerNameDisplay"
+					).textContent;
+				const aadhar =
+					document.getElementById(
+						"aadharDisplay"
+					).textContent;
+				const farmSize =
+					document.getElementById(
+						"farmSizeDisplay"
+					).textContent;
+				const farmLocation = document.getElementById(
+					"farmLocationDisplay"
+				).textContent;
+
+				logs.push({
+					farmerName,
+					aadhar,
+					farmSize,
+					farmLocation,
+					productName,
+					seedingDate,
+					harvestingDate,
+					totalYield,
+					photosCount,
+					date: new Date().toLocaleString(),
+				});
+
+				alert(
+					"Production data recorded on blockchain!"
+				);
+				// Optionally clear form fields unless you want to preserve for next entry
+				e.target.reset();
+				photoPreview.innerHTML = "";
+			};
+
+			// Render logs in card format
+			function renderLogs() {
+				logsContainer.innerHTML = "";
+				if (!logs.length) {
+					logsContainer.innerHTML =
+						'<p class="text-gray-300">No logs recorded yet.</p>';
+					return;
+				}
+				logs.slice()
+					.reverse()
+					.forEach((log) => {
+						const logCard =
+							document.createElement(
+								"div"
+							);
+						logCard.className =
+							"glass-card p-4";
+						logCard.innerHTML = `
+            <h3 class="font-semibold text-accent mb-2">${log.farmerName}</h3>
+            <p>Aadhar: ${log.aadhar}</p>
+            <p>Farm Size: ${log.farmSize}</p>
+            <p>Farm Location: ${log.farmLocation}</p>
+            <p>Product: ${log.productName}</p>
+            <p>Date of Seeding: ${log.seedingDate || "–"}</p>
+            <p>Date of Harvesting: ${log.harvestingDate || "–"}</p>
+            <p>Total Yield: ${log.totalYield} kg</p>
+            <p>Crops Uploaded: ${log.photosCount} photo(s)</p>
+            <p>Submitted On: ${log.date}</p>
+          `;
+						logsContainer.appendChild(
+							logCard
+						);
+					});
+			}
+		</script>
+	</body>
+</html>
+<!-- ``` *** **Your logs section now displays all submissions as glassmorphism cards
+with complete information, and the logs tab toggles correctly.** -->

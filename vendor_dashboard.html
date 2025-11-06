@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1"
+		/>
+		<title>AgriChain | Vendor/Retailer Dashboard</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: "#0a5c36",
+							secondary: "#1a936f",
+							accent: "#88d498",
+							tomato: "#FF6347",
+							tomatoLight: "#FF7F50",
+						},
+						fontFamily: {
+							montserrat: [
+								"Montserrat",
+								"sans-serif",
+							],
+						},
+					},
+				},
+			};
+		</script>
+		<style>
+			body {
+				font-family: "Montserrat", sans-serif;
+				background: linear-gradient(
+					135deg,
+					#0a2e1d 0%,
+					#0a5c36 100%
+				);
+				color: white;
+				min-height: 100vh;
+			}
+			.glass-card {
+				background: rgba(255, 255, 255, 0.1);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				backdrop-filter: blur(15px);
+				border-radius: 20px;
+				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+			}
+			.gradient-text {
+				background: linear-gradient(
+					90deg,
+					#88d498,
+					#1a936f
+				);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+			.btn-gradient {
+				background: linear-gradient(
+					90deg,
+					#1a936f,
+					#88d498
+				);
+			}
+			.btn-gradient:hover {
+				background: linear-gradient(
+					90deg,
+					#88d498,
+					#1a936f
+				);
+			}
+		</style>
+	</head>
+	<body class="flex flex-col items-center p-6">
+		<header
+			class="w-full max-w-6xl flex justify-between items-center mb-10"
+		>
+			<h1 class="text-3xl font-bold gradient-text">
+				Vendor / Retailer Dashboard
+			</h1>
+		</header>
+
+		<main class="w-full max-w-4xl glass-card p-8 md:p-10">
+			<form
+				id="vendorForm"
+				class="space-y-6"
+				autocomplete="off"
+			>
+				<div>
+					<label
+						for="productName"
+						class="block mb-2 font-medium"
+						>Name of Vegetable/Fruit
+						Purchased</label
+					>
+					<input
+						type="text"
+						id="productName"
+						placeholder="Enter product name (e.g., Tomato, Apple)"
+						required
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+					/>
+				</div>
+
+				<div>
+					<label
+						for="quantityPurchased"
+						class="block mb-2 font-medium"
+						>Quantity Purchased (kg)</label
+					>
+					<input
+						type="number"
+						id="quantityPurchased"
+						min="0"
+						step="any"
+						placeholder="Enter quantity purchased"
+						required
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+					/>
+				</div>
+
+				<!-- QR Code generation placeholder -->
+				<section class="mt-6 glass-card p-4">
+					<h3 class="font-semibold mb-2">
+						Generated QR Code
+					</h3>
+					<p class="text-gray-300 italic mb-4">
+						QR code linking to blockchain
+						record will be generated here
+						after form submission.
+					</p>
+					<div
+						id="qrCodeContainer"
+						class="flex justify-center"
+					></div>
+				</section>
+
+				<div class="flex justify-end mt-6">
+					<button
+						type="submit"
+						class="btn-gradient text-white px-6 py-3 rounded-lg font-semibold shadow-md transition"
+					>
+						Generate QR Code
+					</button>
+				</div>
+			</form>
+		</main>
+
+		<footer
+			class="text-xs text-gray-300 mt-10 w-full max-w-6xl text-center"
+		>
+			© 2025 AgriChain | End-to-End Transparency for Consumers
+		</footer>
+
+		<script>
+			// Placeholder for future QR code generation logic
+			document.getElementById("vendorForm").onsubmit =
+				function (e) {
+					e.preventDefault();
+
+					const productName =
+						e.target.productName.value.trim();
+					const quantityPurchased =
+						e.target.quantityPurchased
+							.value;
+
+					// Clear previous QR code if any
+					const qrContainer =
+						document.getElementById(
+							"qrCodeContainer"
+						);
+					qrContainer.innerHTML = "";
+
+					// Here you can call your QR code generation logic using productName and quantityPurchased,
+					// linking QR to blockchain record (farmer, seed/fertilizer, quality, transport)
+
+					// Sample placeholder: showing textual info to simulate
+					const placeholder =
+						document.createElement("div");
+					placeholder.className =
+						"text-center text-accent font-semibold";
+					placeholder.textContent = `QR code generated for ${productName} (${quantityPurchased} kg). Paste your QR logic here.`;
+					qrContainer.appendChild(placeholder);
+				};
+		</script>
+	</body>
+</html>

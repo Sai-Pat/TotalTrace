@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>AgriChain | Seed Seller Dashboard</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: "#0a5c36",
+							secondary: "#1a936f",
+							accent: "#88d498",
+							tomato: "#FF6347",
+							tomatoLight: "#FF7F50",
+						},
+						fontFamily: {
+							montserrat: [
+								"Montserrat",
+								"sans-serif",
+							],
+						},
+						backgroundImage: {
+							"dashboard-gradient":
+								"linear-gradient(135deg, #0a2e1d 0%, #0a5c36 100%)",
+						},
+					},
+				},
+			};
+		</script>
+		<style>
+			body {
+				font-family: "Montserrat", sans-serif;
+				background: linear-gradient(
+					135deg,
+					#0a2e1d 0%,
+					#0a5c36 100%
+				);
+				color: white;
+				min-height: 100vh;
+			}
+			.glass-card {
+				background: rgba(255, 255, 255, 0.1);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				backdrop-filter: blur(15px);
+				border-radius: 20px;
+				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+			}
+			.gradient-text {
+				background: linear-gradient(
+					90deg,
+					#88d498,
+					#1a936f
+				);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+			.btn-gradient {
+				background: linear-gradient(
+					90deg,
+					#1a936f,
+					#88d498
+				);
+			}
+			.btn-gradient:hover {
+				background: linear-gradient(
+					90deg,
+					#88d498,
+					#1a936f
+				);
+			}
+		</style>
+	</head>
+	<body class="flex flex-col items-center p-6">
+		<!-- Header -->
+		<header
+			class="w-full max-w-6xl flex justify-between items-center mb-10"
+		>
+			<h1 class="text-3xl font-bold gradient-text">
+				Seed Seller Dashboard
+			</h1>
+			<nav class="flex gap-6 text-sm font-medium">
+				<button
+					id="dashboardTab"
+					class="hover:text-accent"
+				>
+					Dashboard
+				</button>
+				<button id="logsTab" class="hover:text-accent">
+					Logs
+				</button>
+			</nav>
+			<div class="flex items-center gap-4">
+				<img
+					src="https://via.placeholder.com/50"
+					alt="Seller Photo"
+					class="w-12 h-12 rounded-full border-2 border-accent object-cover"
+				/>
+				<div>
+					<p class="font-semibold text-accent">
+						Welcome, Suresh Kumar
+					</p>
+					<a
+						href="#"
+						class="text-xs text-gray-300 hover:text-accent"
+						>Logout</a
+					>
+				</div>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+		<main class="w-full max-w-5xl glass-card p-8 md:p-10">
+			<h2 class="text-2xl font-semibold mb-6 gradient-text">
+				Seed Distribution Form
+			</h2>
+			<form id="seedForm" class="space-y-6">
+				<div>
+					<label
+						class="block text-sm font-medium mb-2"
+						>Farmer Name</label
+					>
+					<input
+						id="farmerName"
+						type="text"
+						placeholder="Enter Farmer Name"
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+						required
+					/>
+				</div>
+				<div>
+					<label
+						class="block text-sm font-medium mb-2"
+						>Farmer’s Aadhar Number</label
+					>
+					<input
+						id="aadhar"
+						type="text"
+						placeholder="Enter Aadhar Number"
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+						required
+					/>
+				</div>
+				<div>
+					<label
+						class="block text-sm font-medium mb-2"
+						>Seed Type / Name</label
+					>
+					<select
+						id="seedType"
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+						required
+					>
+						<option value="">
+							Select Seed Type
+						</option>
+						<option value="Wheat">
+							Wheat
+						</option>
+						<option value="Rice">
+							Rice
+						</option>
+						<option value="Maize">
+							Maize
+						</option>
+						<option value="Soybean">
+							Soybean
+						</option>
+					</select>
+				</div>
+				<div>
+					<label
+						class="block text-sm font-medium mb-2"
+						>Farm Size (acres)</label
+					>
+					<input
+						id="farmSize"
+						type="text"
+						disabled
+						value="Auto-fetched from Farmer Profile"
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-gray-300 cursor-not-allowed"
+					/>
+				</div>
+
+				<!-- Stock Before and After Sale -->
+				<div class="grid md:grid-cols-2 gap-6">
+					<div>
+						<label
+							class="block text-sm font-medium mb-2"
+							>Seed Stock Before Sale
+							(kg)</label
+						>
+						<input
+							id="stockBefore"
+							type="number"
+							placeholder="Enter stock before sale"
+							class="w-full p-3 rounded-lg bg-white/10 border border-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+							required
+						/>
+					</div>
+					<div>
+						<label
+							class="block text-sm font-medium mb-2"
+							>Seed Stock After Sale
+							(kg)</label
+						>
+						<input
+							id="stockAfter"
+							type="number"
+							placeholder="Enter stock after sale"
+							class="w-full p-3 rounded-lg bg-white/10 border border-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+							required
+						/>
+					</div>
+				</div>
+
+				<!-- Predict Button -->
+				<div class="flex justify-end">
+					<button
+						type="button"
+						id="predictBtn"
+						class="btn-gradient text-white px-6 py-3 rounded-lg font-semibold shadow-md transition"
+					>
+						Predict Seed Quantity
+					</button>
+				</div>
+
+				<div
+					id="predictionCard"
+					class="glass-card mt-4 p-4 text-center"
+				>
+					<p class="text-lg">
+						Predicted Required Seed
+						Quantity:
+					</p>
+					<h3
+						id="predictedQty"
+						class="text-2xl font-bold text-accent mt-2"
+					>
+						-- kg
+					</h3>
+				</div>
+
+				<div class="mt-8 flex justify-end">
+					<button
+						type="submit"
+						class="bg-tomato hover:bg-tomatoLight text-white px-6 py-3 rounded-lg font-semibold shadow-md transition"
+					>
+						Record on Blockchain
+					</button>
+				</div>
+			</form>
+		</main>
+
+		<section
+			id="logsSection"
+			class="w-full max-w-5xl glass-card p-8 md:p-10 hidden"
+		>
+			<h2 class="text-2xl font-semibold mb-6 gradient-text">
+				Transaction Logs
+			</h2>
+			<div id="logsContainer" class="space-y-4 text-sm">
+				<p class="text-gray-300">
+					No logs found. Start recording
+					transactions.
+				</p>
+			</div>
+		</section>
+
+		<footer class="text-xs text-gray-300 mt-10">
+			© 2025 AgriChain | Ensuring Seed Traceability &
+			Transparency
+		</footer>
+
+		<script>
+			const logs = [];
+			const dashboardSection = document.querySelector("main");
+			const logsSection =
+				document.getElementById("logsSection");
+			const dashboardTab =
+				document.getElementById("dashboardTab");
+			const logsTab = document.getElementById("logsTab");
+			const logsContainer =
+				document.getElementById("logsContainer");
+
+			dashboardTab.onclick = () => {
+				dashboardSection.classList.remove("hidden");
+				logsSection.classList.add("hidden");
+				dashboardTab.classList.add(
+					"text-accent",
+					"underline"
+				);
+				logsTab.classList.remove(
+					"text-accent",
+					"underline"
+				);
+			};
+
+			logsTab.onclick = () => {
+				dashboardSection.classList.add("hidden");
+				logsSection.classList.remove("hidden");
+				logsTab.classList.add(
+					"text-accent",
+					"underline"
+				);
+				dashboardTab.classList.remove(
+					"text-accent",
+					"underline"
+				);
+				renderLogs();
+			};
+
+			document.getElementById("predictBtn").onclick = () => {
+				const seedType =
+					document.getElementById(
+						"seedType"
+					).value;
+				if (!seedType)
+					return alert("Select Seed Type first.");
+				const quantity = Math.floor(
+					Math.random() * 50 + 10
+				);
+				document.getElementById(
+					"predictedQty"
+				).innerText = quantity + " kg";
+				document.getElementById(
+					"predictionCard"
+				).classList.remove("hidden");
+			};
+
+			document.getElementById("seedForm").onsubmit = (e) => {
+				e.preventDefault();
+				const aadhar = document
+					.getElementById("aadhar")
+					.value.trim();
+				const farmerName = document
+					.getElementById("farmerName")
+					.value.trim();
+				const seedType =
+					document.getElementById(
+						"seedType"
+					).value;
+				const stockBefore = document
+					.getElementById("stockBefore")
+					.value.trim();
+				const stockAfter = document
+					.getElementById("stockAfter")
+					.value.trim();
+				const qty =
+					document.getElementById(
+						"predictedQty"
+					).innerText;
+
+				if (
+					!aadhar ||
+					!seedType ||
+					!stockBefore ||
+					!stockAfter
+				)
+					return alert(
+						"Please fill in all required fields."
+					);
+
+				const log = {
+					farmerName,
+					aadhar,
+					seedType,
+					qty,
+					stockBefore,
+					stockAfter,
+					date: new Date().toLocaleString(),
+				};
+
+				logs.push(log);
+				alert("Transaction recorded successfully!");
+				e.target.reset();
+				document.getElementById(
+					"predictionCard"
+				).classList.add("hidden");
+			};
+
+			function renderLogs() {
+				logsContainer.innerHTML = "";
+				if (!logs.length) {
+					logsContainer.innerHTML =
+						'<p class="text-gray-300">No logs recorded yet.</p>';
+					return;
+				}
+
+				logs.forEach((log) => {
+					const logCard =
+						document.createElement("div");
+					logCard.className = "glass-card p-4";
+					logCard.innerHTML = `
+          <h3 class="font-semibold text-accent mb-2">${log.farmerName}</h3>
+          <p>Aadhar: ${log.aadhar}</p>
+          <p>Seed Type: ${log.seedType}</p>
+          <p>Quantity: ${log.qty}</p>
+          <p>Stock Before Sale: ${log.stockBefore} kg</p>
+          <p>Stock After Sale: ${log.stockAfter} kg</p>
+          <p>Date: ${log.date}</p>
+        `;
+					logsContainer.appendChild(logCard);
+				});
+			}
+		</script>
+	</body>
+</html>

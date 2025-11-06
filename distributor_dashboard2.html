@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1"
+		/>
+		<title>AgriChain | Distributor (Sabji Mandi) Dashboard</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: "#0a5c36",
+							secondary: "#1a936f",
+							accent: "#88d498",
+							tomato: "#FF6347",
+							tomatoLight: "#FF7F50",
+						},
+						fontFamily: {
+							montserrat: [
+								"Montserrat",
+								"sans-serif",
+							],
+						},
+					},
+				},
+			};
+		</script>
+		<style>
+			body {
+				font-family: "Montserrat", sans-serif;
+				background: linear-gradient(
+					135deg,
+					#0a2e1d 0%,
+					#0a5c36 100%
+				);
+				color: white;
+				min-height: 100vh;
+			}
+			.glass-card {
+				background: rgba(255, 255, 255, 0.1);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				backdrop-filter: blur(15px);
+				border-radius: 20px;
+				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+			}
+			.gradient-text {
+				background: linear-gradient(
+					90deg,
+					#88d498,
+					#1a936f
+				);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+			.btn-gradient {
+				background: linear-gradient(
+					90deg,
+					#1a936f,
+					#88d498
+				);
+			}
+			.btn-gradient:hover {
+				background: linear-gradient(
+					90deg,
+					#88d498,
+					#1a936f
+				);
+			}
+			input[type="file"]::-webkit-file-upload-button {
+				cursor: pointer;
+				background: #1a936f;
+				border: none;
+				color: white;
+				padding: 0.3rem 0.6rem;
+				border-radius: 0.4rem;
+				transition: background 0.3s ease;
+			}
+			input[type="file"]::-webkit-file-upload-button:hover {
+				background: #88d498;
+			}
+			.photo-grid {
+				display: grid;
+				grid-template-columns: repeat(
+					auto-fill,
+					minmax(100px, 1fr)
+				);
+				gap: 1rem;
+			}
+			nav button.active {
+				@apply text-accent underline;
+			}
+		</style>
+	</head>
+	<body class="flex flex-col items-center p-6">
+		<!-- Header -->
+		<header
+			class="w-full max-w-6xl flex justify-between items-center mb-10"
+		>
+			<h1 class="text-3xl font-bold gradient-text">
+				Distributor (Sabji Mandi) Dashboard
+			</h1>
+			<nav class="flex gap-6 text-sm font-medium">
+				<button
+					id="incomingTab"
+					class="hover:text-accent active"
+				>
+					Incoming
+				</button>
+				<button
+					id="outgoingTab"
+					class="hover:text-accent"
+				>
+					Outgoing
+				</button>
+				<button id="logsTab" class="hover:text-accent">
+					Logs
+				</button>
+			</nav>
+			<div class="flex items-center gap-4">
+				<img
+					src="https://via.placeholder.com/50"
+					alt="Farmer Photo"
+					class="w-12 h-12 rounded-full border-2 border-accent object-cover"
+				/>
+				<div>
+					<p class="font-semibold text-accent">
+						Welcome, Rajesh Kumar
+					</p>
+					<a
+						href="#"
+						class="text-xs text-gray-300 hover:text-accent"
+						>Logout</a
+					>
+				</div>
+			</div>
+		</header>
+
+		<!-- Incoming Section -->
+		<section
+			id="incomingSection"
+			class="w-full max-w-5xl glass-card p-8 md:p-10 space-y-6"
+		>
+			<form
+				id="incomingForm"
+				class="space-y-6"
+				autocomplete="off"
+			>
+				<div>
+					<label
+						for="aadharIncoming"
+						class="block mb-2 font-medium"
+						>Farmer’s Aadhar Number</label
+					>
+					<input
+						type="text"
+						id="aadharIncoming"
+						placeholder="Enter Aadhar Number"
+						required
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+					/>
+				</div>
+
+				<div>
+					<label
+						for="cropPhotosIncoming"
+						class="block mb-2 font-medium"
+						>Upload Crop Images (up to 10
+						for quality check)</label
+					>
+					<input
+						type="file"
+						id="cropPhotosIncoming"
+						accept="image/*"
+						multiple
+						required
+						class="w-full text-white"
+						aria-describedby="photoHelpIncoming"
+					/>
+					<p
+						id="photoHelpIncoming"
+						class="text-xs text-gray-300 mt-1"
+					>
+						Upload clear photos for quality
+						degradation analysis.
+					</p>
+					<div
+						id="photoPreviewIncoming"
+						class="photo-grid mt-4"
+					></div>
+				</div>
+
+				<div>
+					<label
+						for="quantityReceived"
+						class="block mb-2 font-medium"
+						>Quantity Received (kg)</label
+					>
+					<input
+						type="number"
+						id="quantityReceived"
+						min="0"
+						step="any"
+						placeholder="Enter quantity received"
+						required
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+					/>
+				</div>
+
+				<div>
+					<label
+						for="stockArrivalDate"
+						class="block mb-2 font-medium"
+						>Date of Stock Arrival</label
+					>
+					<input
+						type="date"
+						id="stockArrivalDate"
+						required
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+					/>
+				</div>
+
+				<div class="grid md:grid-cols-2 gap-6">
+					<div>
+						<label
+							for="mandiLocationIncoming"
+							class="block mb-2 font-medium"
+							>Mandi Location</label
+						>
+						<input
+							type="text"
+							id="mandiLocationIncoming"
+							placeholder="Enter mandi location"
+							required
+							class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+						/>
+					</div>
+					<div>
+						<label
+							for="mandiNameIncoming"
+							class="block mb-2 font-medium"
+							>Mandi Name</label
+						>
+						<input
+							type="text"
+							id="mandiNameIncoming"
+							placeholder="Enter mandi name"
+							required
+							class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+						/>
+					</div>
+				</div>
+
+				<!-- System Functions placeholders -->
+				<section class="space-y-6 mt-8">
+					<div class="glass-card p-4">
+						<h3 class="font-semibold mb-2">
+							1. Quality Degradation
+							Analysis
+						</h3>
+						<p class="text-gray-300 italic">
+							Model output
+							placeholder: Compare
+							farmer’s quality report
+							with distributor’s
+							samples to measure
+							quality loss during
+							transport.
+						</p>
+					</div>
+
+					<div class="glass-card p-4">
+						<h3 class="font-semibold mb-2">
+							2. Blockchain Logistics
+							Recording
+						</h3>
+						<p class="text-gray-300 italic">
+							Model output
+							placeholder: Record all
+							logistics data on the
+							blockchain for
+							traceability.
+						</p>
+					</div>
+				</section>
+
+				<div class="flex justify-end mt-6">
+					<button
+						type="submit"
+						class="btn-gradient text-white px-6 py-3 rounded-lg font-semibold shadow-md transition"
+					>
+						Record Incoming Stock on
+						Blockchain
+					</button>
+				</div>
+			</form>
+		</section>
+
+		<!-- Outgoing Section -->
+		<section
+			id="outgoingSection"
+			class="w-full max-w-5xl glass-card p-8 md:p-10 space-y-6 hidden"
+		>
+			<form
+				id="outgoingForm"
+				class="space-y-6"
+				autocomplete="off"
+			>
+				<div>
+					<label
+						for="aadharOutgoing"
+						class="block mb-2 font-medium"
+						>Farmer’s Aadhar Number</label
+					>
+					<input
+						type="text"
+						id="aadharOutgoing"
+						placeholder="Enter Aadhar Number"
+						required
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+					/>
+				</div>
+
+				<div>
+					<label
+						for="quantitySold"
+						class="block mb-2 font-medium"
+						>Quantity Sold (kg)</label
+					>
+					<input
+						type="number"
+						id="quantitySold"
+						min="0"
+						step="any"
+						placeholder="Enter quantity sold"
+						required
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+					/>
+				</div>
+
+				<div>
+					<label
+						for="stockSoldDate"
+						class="block mb-2 font-medium"
+						>Date of Stock Sold</label
+					>
+					<input
+						type="date"
+						id="stockSoldDate"
+						required
+						class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-accent"
+					/>
+				</div>
+
+				<div class="grid md:grid-cols-2 gap-6">
+					<div>
+						<label
+							for="mandiLocationOutgoing"
+							class="block mb-2 font-medium"
+							>Mandi Location</label
+						>
+						<input
+							type="text"
+							id="mandiLocationOutgoing"
+							placeholder="Enter mandi location"
+							required
+							class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+						/>
+					</div>
+					<div>
+						<label
+							for="mandiNameOutgoing"
+							class="block mb-2 font-medium"
+							>Mandi Name</label
+						>
+						<input
+							type="text"
+							id="mandiNameOutgoing"
+							placeholder="Enter mandi name"
+							required
+							class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+						/>
+					</div>
+				</div>
+
+				<div class="flex justify-end mt-6">
+					<button
+						type="submit"
+						class="btn-gradient text-white px-6 py-3 rounded-lg font-semibold shadow-md transition"
+					>
+						Record Outgoing Stock on
+						Blockchain
+					</button>
+				</div>
+			</form>
+		</section>
+
+		<!-- Logs Section -->
+		<section
+			id="logsSection"
+			class="w-full max-w-5xl glass-card p-8 md:p-10 hidden"
+		>
+			<h2 class="text-2xl font-semibold mb-6 gradient-text">
+				Log Records
+			</h2>
+			<div id="logsContainer" class="space-y-4 text-sm">
+				<p class="text-gray-300">
+					No logs found. Start recording
+					transactions.
+				</p>
+			</div>
+		</section>
+
+		<footer
+			class="text-xs text-gray-300 mt-10 w-full max-w-6xl text-center"
+		>
+			© 2025 AgriChain | Enabling Transparent Quality &
+			Quantity Tracking
+		</footer>
+
+		<script>
+			const incomingSection =
+				document.getElementById("incomingSection");
+			const outgoingSection =
+				document.getElementById("outgoingSection");
+			const logsSection =
+				document.getElementById("logsSection");
+			const incomingTab =
+				document.getElementById("incomingTab");
+			const outgoingTab =
+				document.getElementById("outgoingTab");
+			const logsTab = document.getElementById("logsTab");
+			const logsContainer =
+				document.getElementById("logsContainer");
+
+			const logs = {
+				incoming: [],
+				outgoing: [],
+			};
+
+			function setActiveTab(tab) {
+				incomingTab.classList.remove(
+					"text-accent",
+					"underline"
+				);
+				outgoingTab.classList.remove(
+					"text-accent",
+					"underline"
+				);
+				logsTab.classList.remove(
+					"text-accent",
+					"underline"
+				);
+
+				incomingSection.classList.add("hidden");
+				outgoingSection.classList.add("hidden");
+				logsSection.classList.add("hidden");
+
+				if (tab === "incoming") {
+					incomingTab.classList.add(
+						"text-accent",
+						"underline"
+					);
+					incomingSection.classList.remove(
+						"hidden"
+					);
+				} else if (tab === "outgoing") {
+					outgoingTab.classList.add(
+						"text-accent",
+						"underline"
+					);
+					outgoingSection.classList.remove(
+						"hidden"
+					);
+				} else if (tab === "logs") {
+					logsTab.classList.add(
+						"text-accent",
+						"underline"
+					);
+					logsSection.classList.remove("hidden");
+					renderLogs();
+				}
+			}
+
+			incomingTab.onclick = () => setActiveTab("incoming");
+			outgoingTab.onclick = () => setActiveTab("outgoing");
+			logsTab.onclick = () => setActiveTab("logs");
+
+			setActiveTab("incoming");
+
+			const inputPhotosIncoming =
+				document.getElementById("cropPhotosIncoming");
+			const photoPreviewIncoming = document.getElementById(
+				"photoPreviewIncoming"
+			);
+			inputPhotosIncoming.addEventListener("change", () => {
+				photoPreviewIncoming.innerHTML = "";
+				const files = inputPhotosIncoming.files;
+				if (!files.length) return;
+				const maxFiles = 10;
+				for (
+					let i = 0;
+					i < Math.min(files.length, maxFiles);
+					i++
+				) {
+					const file = files[i];
+					if (!file.type.startsWith("image/"))
+						continue;
+					const img =
+						document.createElement("img");
+					img.className =
+						"rounded-lg object-cover w-full h-24";
+					img.title = file.name;
+					const reader = new FileReader();
+					reader.onload = (e) =>
+						(img.src = e.target.result);
+					reader.readAsDataURL(file);
+					photoPreviewIncoming.appendChild(img);
+				}
+			});
+
+			document.getElementById("incomingForm").onsubmit = (
+				e
+			) => {
+				e.preventDefault();
+				const form = e.target;
+				logs.incoming.push({
+					aadhar: form.aadharIncoming.value.trim(),
+					quantityReceived:
+						form.quantityReceived.value.trim(),
+					stockArrivalDate:
+						form.stockArrivalDate.value,
+					mandiLocation:
+						form.mandiLocationIncoming.value.trim(),
+					mandiName: form.mandiNameIncoming.value.trim(),
+					photosCount:
+						form.cropPhotosIncoming.files
+							.length,
+					timestamp: new Date().toLocaleString(),
+				});
+				alert("Incoming stock recorded on blockchain!");
+				form.reset();
+				photoPreviewIncoming.innerHTML = "";
+			};
+
+			document.getElementById("outgoingForm").onsubmit = (
+				e
+			) => {
+				e.preventDefault();
+				const form = e.target;
+				logs.outgoing.push({
+					aadhar: form.aadharOutgoing.value.trim(),
+					quantitySold:
+						form.quantitySold.value.trim(),
+					stockSoldDate: form.stockSoldDate.value,
+					mandiLocation:
+						form.mandiLocationOutgoing.value.trim(),
+					mandiName: form.mandiNameOutgoing.value.trim(),
+					timestamp: new Date().toLocaleString(),
+				});
+				alert("Outgoing stock recorded on blockchain!");
+				form.reset();
+			};
+
+			function renderLogs() {
+				logsContainer.innerHTML = "";
+				if (
+					logs.incoming.length === 0 &&
+					logs.outgoing.length === 0
+				) {
+					logsContainer.innerHTML =
+						'<p class="text-gray-300">No logs recorded yet.</p>';
+					return;
+				}
+				if (logs.incoming.length > 0) {
+					const incomingHeader =
+						document.createElement("h3");
+					incomingHeader.className =
+						"gradient-text font-semibold mb-2 text-lg";
+					incomingHeader.textContent =
+						"Incoming Stock Records";
+					logsContainer.appendChild(
+						incomingHeader
+					);
+					logs.incoming
+						.slice()
+						.reverse()
+						.forEach((log) => {
+							const logCard =
+								document.createElement(
+									"div"
+								);
+							logCard.className =
+								"glass-card p-4 mb-4";
+							logCard.innerHTML = `
+            <p><strong>Aadhar:</strong> ${log.aadhar}</p>
+            <p><strong>Quantity Received:</strong> ${log.quantityReceived} kg</p>
+            <p><strong>Date of Arrival:</strong> ${log.stockArrivalDate}</p>
+            <p><strong>Mandi Location:</strong> ${log.mandiLocation}</p>
+            <p><strong>Mandi Name:</strong> ${log.mandiName}</p>
+            <p><strong>Crop Images:</strong> ${log.photosCount} photo(s)</p>
+            <p class="text-xs text-gray-400 mt-1">Recorded on: ${log.timestamp}</p>
+          `;
+							logsContainer.appendChild(
+								logCard
+							);
+						});
+				}
+				if (logs.outgoing.length > 0) {
+					const outgoingHeader =
+						document.createElement("h3");
+					outgoingHeader.className =
+						"gradient-text font-semibold mb-2 text-lg mt-6";
+					outgoingHeader.textContent =
+						"Outgoing Stock Records";
+					logsContainer.appendChild(
+						outgoingHeader
+					);
+					logs.outgoing
+						.slice()
+						.reverse()
+						.forEach((log) => {
+							const logCard =
+								document.createElement(
+									"div"
+								);
+							logCard.className =
+								"glass-card p-4 mb-4";
+							logCard.innerHTML = `
+            <p><strong>Aadhar:</strong> ${log.aadhar}</p>
+            <p><strong>Quantity Sold:</strong> ${log.quantitySold} kg</p>
+            <p><strong>Date of Stock Sold:</strong> ${log.stockSoldDate}</p>
+            <p><strong>Mandi Location:</strong> ${log.mandiLocation}</p>
+            <p><strong>Mandi Name:</strong> ${log.mandiName}</p>
+            <p class="text-xs text-gray-400 mt-1">Recorded on: ${log.timestamp}</p>
+          `;
+							logsContainer.appendChild(
+								logCard
+							);
+						});
+				}
+			}
+		</script>
+	</body>
+</html>
